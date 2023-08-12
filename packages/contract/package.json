@@ -1,8 +1,6 @@
 {
   "name": "contract",
   "version": "1.0.0",
-  "main": "index.js",
-  "license": "MIT",
   "private": true,
   "devDependencies": {
     "@ethersproject/abi": "^5.7.0",
@@ -21,5 +19,9 @@
     "solidity-coverage": "^0.8.2",
     "typechain": "^8.2.0",
     "@openzeppelin/contracts": "^4.9.0"
+  },
+  "scripts": {
+    "compile": "npx hardhat compile",
+    "test": "npx hardhat test"
   }
 }
