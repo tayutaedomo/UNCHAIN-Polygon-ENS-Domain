@@ -1,8 +1,14 @@
 const main = async () => {
   const TLD = process.env.TLD;
+  const TOKEN_NAME = process.env.TOKEN_NAME;
+  const TOKEN_SYMBOL = process.env.TOKEN_SYMBOL;
 
   const domainContractFactory = await hre.ethers.getContractFactory("Domains");
-  const domainContract = await domainContractFactory.deploy(TLD);
+  const domainContract = await domainContractFactory.deploy(
+    TLD,
+    TOKEN_NAME,
+    TOKEN_SYMBOL
+  );
   await domainContract.deployed();
   console.log("Contract deployed to:", domainContract.address);
 
