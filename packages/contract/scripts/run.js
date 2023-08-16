@@ -13,7 +13,8 @@ const main = async () => {
   await domainContract.deployed();
   console.log("Contract deployed to:", domainContract.address);
 
-  const domain = "a16z";
+  // const domain = "a16z";
+  const domain = "12345678901";
   const txn = await domainContract.register(domain, {
     value: hre.ethers.utils.parseEther("1234"),
   });
