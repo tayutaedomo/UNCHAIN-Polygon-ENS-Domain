@@ -9,6 +9,8 @@ import { Base64 } from "./libraries/Base64.sol";
 import "hardhat/console.sol";
 
 contract Domains is ERC721URIStorage {
+    address payable public owner;
+
     using Counters for Counters.Counter;
     Counters.Counter private _tokenIds;
 
@@ -21,8 +23,25 @@ contract Domains is ERC721URIStorage {
     mapping (string => string) public records;
 
     constructor(string memory _tld, string memory _name, string memory _symbol) payable ERC721(_name, _symbol) {
+        owner = payable(msg.sender);
         tld = _tld;
         console.log("THIS IS MY DOMAINS CONTRACT. NICE.");
+    }
+
+    modifier onlyOwner {
+        require(msg.sender == owner);
+        _;
+    }
+
+    function isOwner() public view returns (bool) {
+        return msg.sender == owner;
+    }
+
+    function withdraw() public onlyOwner {
+        uint amount = address(this).balance;
+
+        (bool success, ) = msg.sender.call{value: amount}("");
+        require(success, "Failed to send MATIC");
     }
 
     function price(string calldata name) public pure returns (uint) {
