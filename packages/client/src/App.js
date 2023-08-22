@@ -61,6 +61,7 @@ const App = () => {
 
     const chainId = await ethereum.request({ method: "eth_chainId" });
     setNetwork(networks[chainId] || "");
+
     ethereum.on("chainChanged", (_chainId) => {
       window.location.reload();
     });
@@ -140,6 +141,14 @@ const App = () => {
   );
 
   const renderInputForm = () => {
+    if (network !== "Polygon Mumbai Testnet") {
+      return (
+        <div className="connect-wallet-container">
+          <p>Please connect to the Polygon Munbai Testnet</p>
+        </div>
+      );
+    }
+
     return (
       <div className="form-container">
         <div className="first-row">
