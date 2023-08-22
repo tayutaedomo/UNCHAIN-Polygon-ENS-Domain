@@ -3,6 +3,9 @@ import "./styles/App.css";
 import twitterLogo from "./assets/twitter-logo.svg";
 import { ethers } from "ethers";
 import contractAbi from "./utils/Domains.json";
+import polygonLogo from "./assets/polygonlogo.png";
+import ethLogo from "./assets/ethlogo.png";
+import { networks } from "./utils/networks";
 
 // Constants
 const TWITTER_HANDLE = "_UNCHAIN";
@@ -14,6 +17,7 @@ const App = () => {
   const [currentAccount, setCurrentAccount] = useState("");
   const [domain, setDomain] = useState("");
   const [record, setRecord] = useState("");
+  const [network, setNetwork] = useState("");
 
   const connectWallet = async () => {
     try {
@@ -54,6 +58,12 @@ const App = () => {
     } else {
       console.log("No authorized account found");
     }
+
+    const chainId = await ethereum.request({ method: "eth_chainId" });
+    setNetwork(networks[chainId] || "");
+    ethereum.on("chainChanged", (_chainId) => {
+      window.location.reload();
+    });
   };
 
   const mintDomain = async () => {
@@ -177,6 +187,22 @@ const App = () => {
             <div className="left">
               <p className="title">🐱‍🍌 Banana Name Service</p>
               <p className="subtitle">Your immortal API on the blockchain!</p>
+            </div>
+            <div className="right">
+              <img
+                alt="Network logo"
+                className="logo"
+                src={network.includes("Polygon") ? polygonLogo : ethLogo}
+              />
+              {currentAccount ? (
+                <p>
+                  {" "}
+                  Wallet: {currentAccount.slice(0, 5)} ...{" "}
+                  {currentAccount.slice(-3)}{" "}
+                </p>
+              ) : (
+                <p>Not Connected</p>
+              )}
             </div>
           </header>
         </div>
