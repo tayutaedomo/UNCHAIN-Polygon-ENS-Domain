@@ -321,44 +321,47 @@ const App = () => {
     );
   };
 
+  const MintItem = ({ mint }) => {
+    return (
+      <div className="mint-item">
+        <div className="mint-row">
+          <a
+            className="link"
+            href={`https://testnets.opensea.io/assets/mumbai/${CONTRACT_ADDRESS}/${mint.id}`}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            {" "}
+            {mint.name}
+            {tld}{" "}
+          </a>
+          {mint.owner.toLowerCase() === currentAccount.toLowerCase() ? (
+            <button
+              className="edit-button"
+              onClick={() => editRecord(mint.name)}
+            >
+              <img
+                className="edit-icon"
+                src="https://img.icons8.com/metro/26/000000/pencil.png"
+                alt="Edit button"
+              />
+            </button>
+          ) : null}
+        </div>
+        <p>{mint.record}</p>
+      </div>
+    );
+  };
+
   const renderMints = () => {
     if (currentAccount && mints.length > 0) {
       return (
         <div className="mint-container">
           <p className="subtitle">Recently minted domains!</p>
           <div className="mint-list">
-            {mints.map((mint, index) => {
-              return (
-                <div className="mint-item" key={index}>
-                  <div className="mint-row">
-                    <a
-                      className="link"
-                      href={`https://testnets.opensea.io/assets/mumbai/${CONTRACT_ADDRESS}/${mint.id}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      {" "}
-                      {mint.name}
-                      {tld}{" "}
-                    </a>
-                    {mint.owner.toLowerCase() ===
-                    currentAccount.toLowerCase() ? (
-                      <button
-                        className="edit-button"
-                        onClick={() => editRecord(mint.name)}
-                      >
-                        <img
-                          className="edit-icon"
-                          src="https://img.icons8.com/metro/26/000000/pencil.png"
-                          alt="Edit button"
-                        />
-                      </button>
-                    ) : null}
-                  </div>
-                  <p>{mint.record}</p>
-                </div>
-              );
-            })}
+            {mints.map((mint, index) => (
+              <MintItem key={index} mint={mint} />
+            ))}
           </div>
         </div>
       );
