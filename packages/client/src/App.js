@@ -4,10 +4,7 @@ import useEthereumConnection from "./hooks/useEthereumConnection";
 import useDomainActions from "./hooks/useDomainActions";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
-
-// Constants
-const CONTRACT_ADDRESS = process.env.REACT_APP_CONTRACT_ADDRESS;
-const tld = ".banana";
+import { CONTRACT_ADDRESS, TLD } from "./constants";
 
 const App = () => {
   const { currentAccount, network, connectWallet, switchNetwork } =
@@ -74,7 +71,7 @@ const App = () => {
             placeholder="domain"
             onChange={(e) => setDomain(e.target.value)}
           />
-          <p className="tld">{tld}</p>
+          <p className="tld">{TLD}</p>
         </div>
 
         <input
@@ -127,7 +124,7 @@ const App = () => {
           >
             {" "}
             {mint.name}
-            {tld}{" "}
+            {TLD}{" "}
           </a>
           {mint.owner.toLowerCase() === currentAccount.toLowerCase() ? (
             <button

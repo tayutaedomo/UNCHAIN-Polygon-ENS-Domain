@@ -1,8 +1,7 @@
 import { useState, useCallback } from "react";
 import { ethers } from "ethers";
 import contractAbi from "../utils/Domains.json";
-
-const CONTRACT_ADDRESS = process.env.REACT_APP_CONTRACT_ADDRESS;
+import { CONTRACT_ADDRESS } from "../constants";
 
 const useDomainActions = (currentAccount) => {
   const [loading, setLoading] = useState(false);

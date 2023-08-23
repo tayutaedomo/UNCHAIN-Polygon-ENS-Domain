@@ -1,7 +1,5 @@
 import twitterLogo from "../assets/twitter-logo.svg";
-
-const TWITTER_HANDLE = "_UNCHAIN";
-const TWITTER_LINK = `https://twitter.com/${TWITTER_HANDLE}`;
+import { TWITTER_HANDLE, TWITTER_LINK } from "../constants";
 
 const Footer = () => {
   return (
