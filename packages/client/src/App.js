@@ -1,10 +1,11 @@
-import { React, useEffect, useState } from "react";
+import { React, useEffect, useState, useCallback } from "react";
 import "./styles/App.css";
 import useEthereumConnection from "./hooks/useEthereumConnection";
 import useDomainActions from "./hooks/useDomainActions";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import { CONTRACT_ADDRESS, TLD } from "./constants";
+import { useMemo } from "react";
 
 const App = () => {
   const { currentAccount, network, connectWallet, switchNetwork } =
@@ -23,11 +24,14 @@ const App = () => {
 
   const [editing, setEditing] = useState(false);
 
-  const editRecord = async (name) => {
-    console.log("Editing record for", name);
-    setEditing(true);
-    setDomain(name);
-  };
+  const editRecord = useCallback(
+    async (name) => {
+      console.log("Editing record for", name);
+      setEditing(true);
+      setDomain(name);
+    },
+    [setEditing, setDomain]
+  );
 
   useEffect(() => {
     if (network !== "Polygon Mumbai Testnet") {
