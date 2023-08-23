@@ -5,7 +5,7 @@ import { ethers } from "ethers";
 import contractAbi from "./utils/Domains.json";
 import polygonLogo from "./assets/polygonlogo.png";
 import ethLogo from "./assets/ethlogo.png";
-import { networks } from "./utils/networks";
+import useEthereumConnection from "./hooks/useEthereumConnection";
 
 // Constants
 const TWITTER_HANDLE = "_UNCHAIN";
@@ -14,100 +14,14 @@ const CONTRACT_ADDRESS = process.env.REACT_APP_CONTRACT_ADDRESS;
 const tld = ".banana";
 
 const App = () => {
-  const [currentAccount, setCurrentAccount] = useState("");
+  const { currentAccount, network, connectWallet, switchNetwork } =
+    useEthereumConnection();
+
   const [domain, setDomain] = useState("");
   const [record, setRecord] = useState("");
-  const [network, setNetwork] = useState("");
   const [editing, setEditing] = useState(false);
   const [loading, setLoading] = useState(false);
   const [mints, setMints] = useState([]);
-
-  const connectWallet = async () => {
-    try {
-      const { ethereum } = window;
-
-      if (!ethereum) {
-        alert("Get MetaMask -> https://metamask.io/");
-        return;
-      }
-
-      const accounts = await ethereum.request({
-        method: "eth_requestAccounts",
-      });
-
-      console.log("Connected", accounts[0]);
-      setCurrentAccount(accounts[0]);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const switchNetwork = async () => {
-    if (window.ethereum) {
-      try {
-        await window.ethereum.request({
-          method: "wallet_switchEthereumChain",
-          params: [{ chainId: "0x13881" }],
-        });
-      } catch (error) {
-        if (error.code === 4902) {
-          try {
-            await window.ethereum.request({
-              method: "wallet_addEthereumChain",
-              params: [
-                {
-                  chainId: "0x13881",
-                  chainName: "Polygon Mumbai Testnet",
-                  nativeCurrency: {
-                    name: "Mumbai Matic",
-                    symbol: "MATIC",
-                    decimals: 18,
-                  },
-                  rpcUrls: ["https://rpc-mumbai.maticvigil.com/"],
-                  blockExplorerUrls: ["https://mumbai.polygonscan.com/"],
-                },
-              ],
-            });
-          } catch (error) {
-            console.log(error);
-          }
-        }
-        console.log(error);
-      }
-    } else {
-      alert(
-        "MetaMask is not installed. Please install it to use this app: https://metamask.io/download.html"
-      );
-    }
-  };
-
-  const checkIfWalletIsConnected = async () => {
-    const { ethereum } = window;
-
-    if (!ethereum) {
-      console.log("Make sure you have MetaMask!");
-      return;
-    } else {
-      console.log("We have the ethereum object", ethereum);
-    }
-
-    const accounts = await ethereum.request({ method: "eth_accounts" });
-
-    if (accounts.length !== 0) {
-      const account = accounts[0];
-      console.log("Found an authorized account:", account);
-      setCurrentAccount(account);
-    } else {
-      console.log("No authorized account found");
-    }
-
-    const chainId = await ethereum.request({ method: "eth_chainId" });
-    setNetwork(networks[chainId] || "");
-
-    ethereum.on("chainChanged", (_chainId) => {
-      window.location.reload();
-    });
-  };
 
   const mintDomain = async () => {
     if (!domain) {
@@ -233,10 +147,6 @@ const App = () => {
     setEditing(true);
     setDomain(name);
   };
-
-  useEffect(() => {
-    checkIfWalletIsConnected();
-  }, []);
 
   useEffect(() => {
     if (network !== "Polygon Mumbai Testnet") {
