@@ -87,9 +87,15 @@ const useEthereumConnection = () => {
     const chainId = await ethereum.request({ method: "eth_chainId" });
     setNetwork(networks[chainId] || "");
 
-    ethereum.on("chainChanged", (_chainId) => {
+    const handleChainChanged = () => {
       window.location.reload();
-    });
+    };
+
+    ethereum.on("chainChanged", handleChainChanged);
+
+    return () => {
+      ethereum.removeListener("chainChanged", handleChainChanged);
+    };
   };
 
   useEffect(() => {
