@@ -1,14 +1,11 @@
 import { React, useEffect, useState } from "react";
 import "./styles/App.css";
-import twitterLogo from "./assets/twitter-logo.svg";
-import polygonLogo from "./assets/polygonlogo.png";
-import ethLogo from "./assets/ethlogo.png";
 import useEthereumConnection from "./hooks/useEthereumConnection";
 import useDomainActions from "./hooks/useDomainActions";
+import Header from "./components/Header";
+import Footer from "./components/Footer";
 
 // Constants
-const TWITTER_HANDLE = "_UNCHAIN";
-const TWITTER_LINK = `https://twitter.com/${TWITTER_HANDLE}`;
 const CONTRACT_ADDRESS = process.env.REACT_APP_CONTRACT_ADDRESS;
 const tld = ".banana";
 
@@ -168,44 +165,13 @@ const App = () => {
   return (
     <div className="App">
       <div className="container">
-        <div className="header-container">
-          <header>
-            <div className="left">
-              <p className="title">🐱‍🍌 Banana Name Service</p>
-              <p className="subtitle">Your immortal API on the blockchain!</p>
-            </div>
-            <div className="right">
-              <img
-                alt="Network logo"
-                className="logo"
-                src={network.includes("Polygon") ? polygonLogo : ethLogo}
-              />
-              {currentAccount ? (
-                <p>
-                  {" "}
-                  Wallet: {currentAccount.slice(0, 5)} ...{" "}
-                  {currentAccount.slice(-3)}{" "}
-                </p>
-              ) : (
-                <p>Not Connected</p>
-              )}
-            </div>
-          </header>
-        </div>
+        <Header currentAccount={currentAccount} network={network} />
 
         {!currentAccount && renderNotConnectedContainer()}
         {currentAccount && renderInputForm()}
         {mints && renderMints()}
 
-        <div className="footer-container">
-          <img alt="Twitter Logo" className="twitter-logo" src={twitterLogo} />
-          <a
-            className="footer-text"
-            href={TWITTER_LINK}
-            target="_blank"
-            rel="noreferrer"
-          >{`built with @${TWITTER_HANDLE}`}</a>
-        </div>
+        <Footer />
       </div>
     </div>
   );
